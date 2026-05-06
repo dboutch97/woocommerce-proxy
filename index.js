@@ -8,6 +8,11 @@ const CONSUMER_KEY = 'ck_8fa83ba03ce5e7d45c22900c1c0150d12e342ffa';
 const CONSUMER_SECRET = 'cs_71efe6814a1c95f41804f27b75687c8682e5d256';
 const WC_BASE = 'https://plasticworld.ca/wp-json/wc/v3';
 
+app.get('/ip', async (req, res) => {
+  const response = await axios.get('https://api.ipify.org?format=json');
+  res.json(response.data);
+});
+
 app.get('/order', async (req, res) => {
   const { order_id, search } = req.query;
   try {
