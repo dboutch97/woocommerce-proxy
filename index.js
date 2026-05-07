@@ -26,12 +26,17 @@ app.get('/order', async (req, res) => {
     if (!order || !order.id) {
       return res.json({ found: false, message: 'No order found.' });
     }
+
+    const items = order.line_items.map(item => `${item.name} x${item.quantity}`).join(', ');
+
     res.json({
       found: true,
       order_id: order.id,
       status: order.status,
       customer_name: `${order.billing.first_name} ${order.billing.last_name}`,
-      notes: order.customer_note || 'No notes on this order.'
+      notes: order.customer_note || 'No notes on this order.',
+      items: items || 'No items found.',
+      total: `$${order.total} ${order.currency}`
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
