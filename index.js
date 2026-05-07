@@ -1,7 +1,6 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-
 app.use(express.json());
 
 const CONSUMER_KEY = 'ck_8fa83ba03ce5e7d45c22900c1c0150d12e342ffa';
@@ -18,13 +17,11 @@ app.get('/order', async (req, res) => {
   try {
     let url;
     if (order_id) {
-      url = `${WC_BASE}/orders/${order_id}`;
+      url = `${WC_BASE}/orders/${order_id}?consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`;
     } else {
-      url = `${WC_BASE}/orders?search=${encodeURIComponent(search)}`;
+      url = `${WC_BASE}/orders?search=${encodeURIComponent(search)}&consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`;
     }
-    const response = await axios.get(url, {
-      auth: { username: CONSUMER_KEY, password: CONSUMER_SECRET }
-    });
+    const response = await axios.get(url);
     const order = Array.isArray(response.data) ? response.data[0] : response.data;
     if (!order || !order.id) {
       return res.json({ found: false, message: 'No order found.' });
