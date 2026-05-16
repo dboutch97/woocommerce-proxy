@@ -1,17 +1,3 @@
-const express = require('express');
-const axios = require('axios');
-const app = express();
-app.use(express.json());
-
-const CONSUMER_KEY = 'ck_8fa83ba03ce5e7d45c22900c1c0150d12e342ffa';
-const CONSUMER_SECRET = 'cs_71efe6814a1c95f41804f27b75687c8682e5d256';
-const WC_BASE = 'https://plasticworld.ca/wp-json/wc/v3';
-
-app.get('/ip', async (req, res) => {
-  const response = await axios.get('https://api.ipify.org?format=json');
-  res.json(response.data);
-});
-
 app.get('/order', async (req, res) => {
   let { order_id, search, caller_phone, caller_name } = req.query;
 
@@ -34,7 +20,12 @@ app.get('/order', async (req, res) => {
       return res.json({ found: false, message: 'No order information provided.' });
     }
 
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+      }
+    });
+
     const order = Array.isArray(response.data) ? response.data[0] : response.data;
 
     if (!order || !order.id) {
@@ -56,6 +47,3 @@ app.get('/order', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy running on port ${PORT}`));
