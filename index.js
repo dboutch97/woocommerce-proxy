@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Token is loaded from Railway environment variable for security
-const SCALESMART_TOKEN = process.env.SCALESMART_TOKEN || '02fdb22b-dd31-4454-91f9-27caf4363f5d';
+const SCALESMART_TOKEN = process.env.SCALESMART_TOKEN;
 const PLUGIN_ENDPOINT = 'https://plasticworld.ca/wp-json/scalesmart/v1/order-lookup';
 
 app.get('/ip', async (req, res) => {
